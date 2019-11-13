@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Groups -->
+
+    <record id="crm_group_account_manager" model="res.groups">
+        <field name="name">CRM Account Manager</field>
+        <field name="category_id" ref="base.module_category_sales_management"/>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+        <field name="comment">the user will have access to his own data in the crm application.</field>
+    </record>
+
+    <record id="crm_group_back_office_manager" model="res.groups">
+        <field name="name">CRM Back-office Manager</field>
+        <field name="category_id" ref="base.module_category_sales_management"/>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman_all_leads'))]"/>
+        <field name="comment">the user will have access to all records of everyone in the crm application.</field>
+    </record>
+
+    <!-- Rules -->
+
+    <record id="crm_lead_rule_account_manager" model="ir.rule">
+        <field name="name">Personal Leads</field>
+        <field ref="model_crm_lead" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+        <field name="groups" eval="[(4, ref('crm_group_account_manager'))]"/>
+    </record>
+
+    <record id="crm_lead_rule_back_office_manager" model="ir.rule">
+        <field name="name">All Leads</field>
+        <field ref="model_crm_lead" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('crm_group_back_office_manager'))]"/>
+    </record>
+
+    <!-- Defines a global rule to prevent editing of imported leads -->
+    <record id="crm_lead_rule_backend_read_only" model="ir.rule">
+        <field name="name">Leads imported from backend cant be changed</field>
+        <field name="model_id" ref="crm.model_crm_lead"/>
+        <field name="perm_read" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="domain_force">[('internal_reference','=',False)]</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- Form Views -->
+
+    <record id="crm_lead_view_form_opportunity" model="ir.ui.view">
+        <field name="name">crm.lead.view.form.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group" position="inside">
+                <group>
+                    <field name="internal_reference"/>
+                </group>
+                <group>
+                    <field name="is_high_priority"/>
+                    <field name="segment"/>
+                </group>
+                <group string="Commercial Info">
+                    <field name="partner_logo" widget="image"/>
+                    <field name="vat"/> <field name="vat_state"/>
+                    <field name="invoice_address"/>
+                </group>
+                <group string="Authorized Person Info">
+                    <field name="contact_id"/>
+                    <field name="contact_identity_number"/>
+                    <field name="contact_date_of_birth"/>
+                    <field name="contact_email"/>
+                    <field name="contact_mobile"/>
+                </group>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button type="object" name="confirm_vat" string="Confirm VAT"
+                        attrs="{'invisible': [('vat_state', '!=', 'draft')]}"/>
+                <button type="object" name="reject_vat" string="Reject VAT"
+                        attrs="{'invisible': [('vat_state', '!=', 'draft')]}"/>
+            </xpath>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page name="document" string="Documents">
+                    <group>
+                        <field name="document_state"/>
+                    </group>
+                    <field name="document_ids"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Search View -->
+
+    <record id="crm_lead_view_search_opportunity" model="ir.ui.view">
+        <field name="name">crm.lead.view.search.opportunity</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+        <field name="arch" type="xml">
+            <filter name="open_opportunities" position="after">
+                <separator/>
+                <filter string="Large Opportunities" name="large_opportunities"
+                        domain="[('segment', '=', 'large')]"/>
+                <filter string="Medium Opportunities" name="medium_opportunities"
+                        domain="[('segment', '=', 'medium')]"/>
+                <filter string="Small Opportunities" name="small_opportunities"
+                        domain="[('segment', '=', 'small')]"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>
