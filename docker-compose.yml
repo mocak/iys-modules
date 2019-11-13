@@ -10,7 +10,6 @@ services:
     ports:
       - "8069:8069"
     command: odoo -d demo -i crm_apply
-    tty: true
   db:
     image: postgres:alpine
     environment:
