@@ -6,7 +6,7 @@ import json
 import pika
 
 QUEUE = 'backend'
-HOST = 'localhost'
+HOST = 'rabbitmq'
 
 
 class RabbitMqClient(object):
@@ -18,14 +18,14 @@ class RabbitMqClient(object):
 
     def get_connection(self):
         """Returns RabbitMq connection"""
-        if not self.connection:
+        if not self.connection or self.connection.is_closed:
             self.connection = pika.BlockingConnection(
                 pika.ConnectionParameters(HOST))
         return self.connection
 
     def get_channel(self):
         """Returns defined channel"""
-        if not self.channel:
+        if not self.channel or self.channel.is_closed:
             self.channel = self.get_connection().channel()
             self.channel.queue_declare(queue=QUEUE)
         return self.channel

@@ -34,6 +34,7 @@
     ],
     # only loaded in demonstration mode
     'demo': [
-        # 'demo/res_users.xml',
+        'demo/res_partner.xml',
+        'demo/res_users.xml',
     ],
 }

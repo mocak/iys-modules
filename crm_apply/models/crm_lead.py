@@ -86,11 +86,14 @@ class CrmLead(models.Model):
         is_acc_manager = self.env.user.has_group(
             'crm_apply.crm_group_account_manager')
 
-        if ([*values.keys()] == ['user_id']
-                and self.internal_reference
-                and (is_bo_manager
-                     or (is_acc_manager
-                         and values.get('user_id') == self.env.user.id))):
+        if self.internal_reference and (
+                is_bo_manager
+                or (is_acc_manager
+                    and values.get('user_id') == self.env.user.id)):
+            # filter unrelated fields
+            values = {k: values[k] for k in values if k in ['user_id', 'team_id']}
+            print(values)
+
             return super(CrmLead, self.sudo()).write(values)
 
         return super(CrmLead, self).write(values)
@@ -150,7 +153,9 @@ class CrmLead(models.Model):
             'segment': values.get('segment'),
             'is_high_priority': values.get('is_high_priority'),
             'email_from': values.get('contact_email'),
-            'contact_mobile': values.get('contact_gsm'),
+            'contact_name': '%s %s' % (values.get('contact_name'),
+                                       values.get('contact_surname')),
+            'mobile': values.get('contact_gsm'),
             'document_ids': document_ids,
             'user_id': None
         })

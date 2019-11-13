@@ -36,7 +36,7 @@ segments = ['large', 'medium', 'small']
 
 data = {
     'reference': str(randint(111111, 999999)),
-    'company_name': sample.get('login').get('username').upper(),
+    'company_name': sample.get('login').get('username').title(),
     'logo': base64.encodebytes(r.content).decode(ENCODING),
     'vat': str(randint(1000000000, 9999999999)),
     'invoice_address': "%s No: %s %s/%s" % (
@@ -61,7 +61,7 @@ data = {
 }
 
 connection = pika.BlockingConnection(
-    pika.ConnectionParameters(host='localhost'))
+    pika.ConnectionParameters(host='rabbitmq'))
 channel = connection.channel()
 
 channel.queue_declare(queue='odoo')

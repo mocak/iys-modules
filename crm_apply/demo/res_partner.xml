@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="partner_account_manager_demo" model="res.partner">
+        <field name="name">Demo User Account Manager</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="customer" eval="False"/>
+        <field name="email">demo_am@yourcompany.example.com</field>
+        <field name="company_name">YourCompany</field>
+        <field name="street">Avenue des Dessus-de-Lives, 2</field>
+        <field name="city">Namur (Loyers)</field>
+        <field name="zip">5101</field>
+        <field name="country_id" ref="base.be"/>
+    </record>
+
+    <record id="partner_back_office_manager_demo" model="res.partner">
+        <field name="name">Demo User Back-Office Manager</field>
+        <field name="company_id" ref="base.main_company"/>
+        <field name="customer" eval="False"/>
+        <field name="email">demo_bm@yourcompany.example.com</field>
+        <field name="company_name">YourCompany</field>
+        <field name="street">Avenue des Dessus-de-Lives, 2</field>
+        <field name="city">Namur (Loyers)</field>
+        <field name="zip">5101</field>
+        <field name="country_id" ref="base.be"/>
+    </record>
+
+</odoo>
