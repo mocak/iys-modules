@@ -2,12 +2,10 @@
 {
     'name': "Crm Apply",
 
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+    'summary': """ IYS demo module """,
 
     'description': """
-        Long description of module's purpose
+        Iys demo module that imports leads data and communicate with backend via RabbitMq
     """,
 
     'author': "Murat Ocak <mehmetmuratocak@gmail.com>",
