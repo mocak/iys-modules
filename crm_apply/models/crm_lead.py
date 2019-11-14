@@ -92,9 +92,8 @@ class CrmLead(models.Model):
                     and values.get('user_id') == self.env.user.id)):
             # filter unrelated fields
             values = {k: values[k] for k in values if k in ['user_id', 'team_id']}
-            print(values)
-
-            return super(CrmLead, self.sudo()).write(values)
+            if values:
+                return super(CrmLead, self.sudo()).write(values)
 
         return super(CrmLead, self).write(values)
 
