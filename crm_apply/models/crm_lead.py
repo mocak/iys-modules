@@ -3,13 +3,15 @@
 from .. import rabbitmq
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
+from odoo import _
 
 
 class CrmLead(models.Model):
     _inherit = 'crm.lead'
     _order = 'is_high_priority DESC, create_date DESC'
 
-    internal_reference = fields.Char('Reference', readonly=True)
+    internal_reference = fields.Char('Application Number', readonly=True)
     state = fields.Selection([
         ('pending', 'Pending'),
         ('approved', 'Approved'),
@@ -82,31 +84,15 @@ class CrmLead(models.Model):
             'state': state,
         })
 
-    # CRUD operations
-
-    @api.multi
-    def write(self, values):
-        """Enables assign operation only for back-office manager"""
-        is_bo_manager = self.env.user.has_group(
-            'crm_apply.crm_group_back_office_manager')
-        is_acc_manager = self.env.user.has_group(
-            'crm_apply.crm_group_account_manager')
-
-        if self.internal_reference and (
-                is_bo_manager
-                or (is_acc_manager
-                    and values.get('user_id') == self.env.user.id)):
-            # filter unrelated fields
-            values = {k: values[k] for k in values if k in ['user_id', 'team_id']}
-            if values:
-                return super(CrmLead, self.sudo()).write(values)
-
-        return super(CrmLead, self).write(values)
-
     # Actions
 
     @api.multi
     def approve(self):
+
+        if self.filtered(lambda r: r.document_state != 'confirmed'):
+            raise UserError(
+                _('You should confirm all documents before approving the lead!'))
+
         self.sudo().write({'state': 'approved'})
         rabbitmq.client.publish({
             'message': 'Leads Approved',

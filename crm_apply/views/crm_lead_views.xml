@@ -39,7 +39,7 @@
 
             <xpath expr="//header" position="inside">
                 <button type="object" name="approve" string="Approve"
-                        attrs="{'invisible': [('state', '!=', 'pending'), ('document_state', '!=', 'confirmed')]}"
+                        attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('document_state', '!=', 'confirmed')]}"
                         class="oe_highlight"/>
                 <button type="object" name="reject" string="Reject"
                         attrs="{'invisible': [('state', '!=', 'pending')]}"/>
