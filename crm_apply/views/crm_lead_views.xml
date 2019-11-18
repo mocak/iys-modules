@@ -10,6 +10,7 @@
         <field name="arch" type="xml">
             <xpath expr="//form/sheet/group" position="inside">
                 <group>
+                    <field name="state"/>
                     <field name="internal_reference"/>
                 </group>
                 <group>
@@ -30,8 +31,14 @@
                 </group>
             </xpath>
             <xpath expr="//header" position="inside">
+                <button type="object" name="approve" string="Approve"
+                        attrs="{'invisible': [('state', '!=', 'pending'), ('document_state', '!=', 'confirmed')]}"
+                        class="oe_highlight"/>
+                <button type="object" name="reject" string="Reject"
+                        attrs="{'invisible': [('state', '!=', 'pending')]}"/>
                 <button type="object" name="confirm_vat" string="Confirm VAT"
-                        attrs="{'invisible': [('vat_state', '!=', 'draft')]}"/>
+                        attrs="{'invisible': [('vat_state', '!=', 'draft')]}"
+                        class="oe_highlight"/>
                 <button type="object" name="reject_vat" string="Reject VAT"
                         attrs="{'invisible': [('vat_state', '!=', 'draft')]}"/>
             </xpath>

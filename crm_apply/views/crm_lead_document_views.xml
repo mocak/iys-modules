@@ -24,6 +24,8 @@
                 <header>
                     <button name="confirm" string="Confirm"
                             type="object" states="draft" class="oe_highlight"/>
+                    <button name="reject" string="Reject"
+                            type="object" states="draft" class="oe_highlight"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>

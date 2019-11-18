@@ -15,6 +15,7 @@ class CrmLeadDocument(models.Model):
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
+        ('rejected', 'Rejected'),
     ], 'State', default='draft', required=True)
 
     @api.multi
@@ -24,16 +25,28 @@ class CrmLeadDocument(models.Model):
 
         # notify backend that the document was approved
         rabbitmq.client.publish({
+            'message': 'Documents were confirmed',
             'document_ids': self.ids,
             'document_names': self.mapped('name'),
         })
 
         states = self.mapped('lead_id').mapped('document_state')
         if set(states) == {'confirmed'}:
-            # notify backend that the lead was approved
+            # notify backend that the all docs was confirmed
             rabbitmq.client.publish({
-                'reference': self.lead_id.internal_reference,
+                'message': 'All documents were confirmed',
+                'references': self.mapped('lead_id').mapped('internal_reference'),
                 'lead_ids': self.mapped('lead_id').mapped('id'),
             })
 
         return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+    @api.multi
+    def reject(self):
+        """ Rejects document and notifies backend """
+        # notify backend that the document was approved
+        rabbitmq.client.publish({
+            'message': 'Documents were rejected',
+            'document_ids': self.ids,
+            'document_names': self.mapped('name'),
+        })

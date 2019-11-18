@@ -10,6 +10,11 @@ class CrmLead(models.Model):
     _order = 'is_high_priority DESC, create_date DESC'
 
     internal_reference = fields.Char('Reference')
+    state = fields.Selection([
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ], default='pending', readonly=True)
 
     # Partner related fields
     partner_logo = fields.Binary("Logo",
@@ -19,7 +24,7 @@ class CrmLead(models.Model):
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
         ('rejected', 'Rejected'),
-    ], default='draft')
+    ], default='draft', readonly=True)
 
     invoice_id = fields.Many2one('res.partner', 'Invoice',
                                  compute='_compute_invoice_id', store=True)
@@ -71,6 +76,7 @@ class CrmLead(models.Model):
     @api.multi
     def _publish_vat_approval(self, state):
         rabbitmq.client.publish({
+            'message': 'VAT state changed to %s' % state,
             'vat_ids': self.ids,
             'vats': self.mapped('vat'),
             'state': state,
@@ -98,6 +104,22 @@ class CrmLead(models.Model):
         return super(CrmLead, self).write(values)
 
     # Actions
+
+    @api.multi
+    def approve(self):
+        self.sudo().write({'state': 'approved'})
+        rabbitmq.client.publish({
+            'message': 'Leads Approved',
+            'lead_ids': self.ids,
+        })
+
+    @api.multi
+    def reject(self):
+        self.sudo().write({'state': 'rejected'})
+        rabbitmq.client.publish({
+            'message': 'Leads Rejected',
+            'lead_ids': self.ids,
+        })
 
     @api.multi
     def confirm_vat(self):
