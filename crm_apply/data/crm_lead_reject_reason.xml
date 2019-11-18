@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo noupdate="1">
+
+    <record id="reason_missing_document" model="crm.lead.reject.reason">
+        <field name="name">Missing documents</field>
+    </record>
+
+    <record id="reason_vat_not_confirmed" model="crm.lead.reject.reason">
+        <field name="name">VAT not confirmed</field>
+    </record>
+
+</odoo>

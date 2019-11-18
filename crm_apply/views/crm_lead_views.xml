@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 <odoo>
 
+    <!-- Actions -->
+
+    <act_window id="crm_lead_reject_action"
+            name="Reject"
+            res_model="crm.lead.reject.wizard"
+            view_mode="form"
+            target="new"/>
+
     <!-- Form Views -->
 
     <record id="crm_lead_view_form_opportunity" model="ir.ui.view">
@@ -10,8 +18,9 @@
         <field name="arch" type="xml">
             <xpath expr="//form/sheet/group" position="inside">
                 <group>
-                    <field name="state"/>
                     <field name="internal_reference"/>
+                    <field name="state"/>
+                    <field name="reject_reason_id" states="rejected"/>
                 </group>
                 <group>
                     <field name="is_high_priority"/>
@@ -41,7 +50,7 @@
                 <button type="object" name="approve" string="Approve"
                         attrs="{'invisible': ['|', ('state', '!=', 'pending'), ('document_state', '!=', 'confirmed')]}"
                         class="oe_highlight"/>
-                <button type="object" name="reject" string="Reject"
+                <button type="action" name="%(crm_lead_reject_action)d" string="Reject"
                         attrs="{'invisible': [('state', '!=', 'pending')]}"/>
                 <button type="object" name="confirm_vat" string="Confirm VAT"
                         attrs="{'invisible': [('vat_state', '!=', 'draft')]}"

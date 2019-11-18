@@ -17,6 +17,8 @@ class CrmLead(models.Model):
         ('approved', 'Approved'),
         ('rejected', 'Rejected'),
     ], default='pending', readonly=True)
+    reject_reason_id = fields.Many2one('crm.lead.reject.reason',
+                                       'Reject Reason', readonly=True)
 
     # Partner related fields
     partner_logo = fields.Binary("Logo",

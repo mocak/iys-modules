@@ -26,9 +26,12 @@
         'security/crm_security.xml',
         'security/ir.model.access.csv',
         # views
+        'wizards/crm_lead_reject_wizard_views.xml',
         'views/crm_lead_views.xml',
         'views/crm_lead_document_views.xml',
         'views/res_partner_views.xml',
+        # data
+        'data/crm_lead_reject_reason.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
