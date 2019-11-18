@@ -30,6 +30,13 @@
                     <field name="contact_mobile"/>
                 </group>
             </xpath>
+
+            <!--  Hide Misc and Marketing -->
+            <xpath expr="//page[@name='lead']/group/group[4]" position="replace">
+            </xpath>
+            <xpath expr="//page[@name='lead']/group/group[3]" position="replace">
+            </xpath>
+
             <xpath expr="//header" position="inside">
                 <button type="object" name="approve" string="Approve"
                         attrs="{'invisible': [('state', '!=', 'pending'), ('document_state', '!=', 'confirmed')]}"
