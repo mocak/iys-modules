@@ -9,7 +9,7 @@ class CrmLead(models.Model):
     _inherit = 'crm.lead'
     _order = 'is_high_priority DESC, create_date DESC'
 
-    internal_reference = fields.Char('Reference')
+    internal_reference = fields.Char('Reference', readonly=True)
     state = fields.Selection([
         ('pending', 'Pending'),
         ('approved', 'Approved'),
