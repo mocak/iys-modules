@@ -28,7 +28,7 @@ You can check the logs of consumed messages from stdout.
 Use following command to push random lead data to odoo queue.
 
 ```
-docker-compose exec backend python send.py 
+docker-compose exec backend python send.py
 ```
 
 receive.py script which is also consuming the odoo queue will send lead data to Odoo via external api after message was received.

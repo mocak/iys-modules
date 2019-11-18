@@ -21,7 +21,8 @@ class CrmLeadDocument(models.Model):
     @api.multi
     def confirm(self):
         """Confirms document and notifies backend if all documents has approved"""
-        self.write({'state': 'confirmed'})
+
+        self.sudo().write({'state': 'confirmed'})
 
         # notify backend that the document was approved
         rabbitmq.client.publish({
@@ -44,9 +45,14 @@ class CrmLeadDocument(models.Model):
     @api.multi
     def reject(self):
         """ Rejects document and notifies backend """
+
+        self.sudo().write({'state': 'rejected'})
+
         # notify backend that the document was approved
         rabbitmq.client.publish({
             'message': 'Documents were rejected',
             'document_ids': self.ids,
             'document_names': self.mapped('name'),
         })
+
+        return {'type': 'ir.actions.client', 'tag': 'reload'}

@@ -1,4 +1,5 @@
 FROM python:alpine
+MAINTAINER Murat Ocak <mehmetmuratocak@gmail.com>
 
 WORKDIR /usr/src/app
 
